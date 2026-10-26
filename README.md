@@ -11,7 +11,11 @@
 
 ### A. `~/.dsh/skills/` — 21 个（主力）
 
-#### ① 开发流程方法论 · superpowers 全家桶（13 个，第三方）
+21 个里有 **17 个是指向 `E:\skill\skills\` 的符号链接**，实体只有 `architect`、`claude-vision`、`grill`、`lemo-opuscar` 四个目录。
+
+#### ① superpowers 全家桶（14 个，第三方）
+
+一套完整的软件开发方法论，从「先问清楚要做什么」到「收尾合并」。
 
 | skill | 什么时候触发 | 内容 |
 |---|---|---|
@@ -28,10 +32,19 @@
 | `verification-before-completion` | 要说「做完了」之前 | 必须跑命令验证，证据先于断言 |
 | `using-git-worktrees` | 需要隔离工作区 | 建 worktree，不污染当前分支 |
 | `finishing-a-development-branch` | 实现完成、测试通过 | 收尾：merge / PR / 清理 |
+| `writing-skills` | 写/改/验证 skill 本身 | 含 `examples/` |
 
 上游：[obra/superpowers](https://github.com/obra/superpowers)（MIT）
 
-#### ② 中文场景自研（4 个）
+#### ② 单个方法论（1 个，第三方）
+
+| skill | 什么时候触发 | 内容 |
+|---|---|---|
+| `karpathy-guidelines` | 写/审/重构代码时 | 防过度设计、做外科手术式改动、暴露假设、定义可验证的成功标准 |
+
+上游：[multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+
+#### ③ 中文 / 垂直场景（4 个，第三方）
 
 | skill | 什么时候触发 | 内容 |
 |---|---|---|
@@ -41,18 +54,18 @@
 | `lemo-opuscar` | 「做个视频/短片/动画/宣传片」+ 指定风格 | 纯代码短片：油画厚涂、水彩、浮世绘、卫星简报、产品拆解、显微叙事 |
 
 - `grill` / `architect` 上游：[nagi-studio/skills](https://github.com/nagi-studio/skills) 的 `skills/pondering/`（MIT，Nagi Studio）
-- `claude-vision` 上游：[asuojun/claude-vision-skill](https://github.com/asuojun/claude-vision-skill)（本机版删掉了 `node_modules`，脚本仍在 `E:\skill\skills\claude-vision-skill\vision.js`）
+- `claude-vision` 上游：[asuojun/claude-vision-skill](https://github.com/asuojun/claude-vision-skill)（本机版去掉了 `node_modules`，脚本仍在 `E:\skill\skills\claude-vision-skill\vision.js`）
 - `lemo-opuscar` 上游：[lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) 的 `plugin/skills/lemo-opuscar/`（MIT，LemoLab）
 
-#### ③ 重家伙（3 个）
+#### ④ 重家伙（2 个）
 
 | skill | 什么时候触发 | 内容 |
 |---|---|---|
 | `ppt-master` | 「做个 PPT」「生成PPT」「制作演示文稿」 | PDF/DOCX/URL/MD → SVG 页 → PPTX 全流水线。**41 KB SKILL.md + 26 个子目录**，75 MB / 1.2 万文件 |
 | `latex-to-word-paper` | 写中文学术论文 | ctex 写 LaTeX → xelatex 出 PDF → python-docx 转 docx（图、表、脚注全带上） |
-| `writing-skills` | 写/改/验证 skill 本身 | 含 `examples/` |
 
 `ppt-master` 上游：[hugohe3/ppt-master](https://github.com/hugohe3/ppt-master)（本仓库只放索引，正文 75 MB 太大，请自行克隆）
+`latex-to-word-paper` 未找到公开上游，全文收录在 `skills/latex-to-word-paper/`。
 
 ### B. 插件自带 — 9 个
 
@@ -96,25 +109,26 @@ DSH 实际可调用        30 个
 
 ```bash
 # 1) 第三方合集
-git clone https://github.com/obra/superpowers.git          E:\skill\skills\superpowers-main
-git clone https://github.com/nagi-studio/skills.git        E:\skill\skills\nagi-skills
-git clone https://github.com/lemomo-ai/lemo-opuscar.git    E:\skill\skills\lemo-opuscar
-git clone https://github.com/hugohe3/ppt-master.git        E:\skill\skills\ppt-master
-git clone https://github.com/asuojun/claude-vision-skill.git E:\skill\skills\claude-vision-skill
+git clone https://github.com/obra/superpowers.git              E:\skill\skills\superpowers-main
+git clone https://github.com/nagi-studio/skills.git            E:\skill\skills\nagi-skills
+git clone https://github.com/lemomo-ai/lemo-opuscar.git        E:\skill\skills\lemo-opuscar
+git clone https://github.com/hugohe3/ppt-master.git            E:\skill\skills\ppt-master
+git clone https://github.com/asuojun/claude-vision-skill.git   E:\skill\skills\claude-vision-skill
+git clone https://github.com/multica-ai/andrej-karpathy-skills.git E:\skill\skills\andrej-karpathy-skills-main
 
 # 2) 链接进 DSH 的 skill 目录（Windows 用 mklink /D，需要开发者模式或管理员）
-#    或者直接把 skills/ 下的目录复制进 ~/.dsh/skills/
+#    或直接把 skills/ 下的目录复制进 ~/.dsh/skills/
 ```
 
-本仓库 `skills/` 里放的是**自己写的 / 改过的那几个**（grill、architect、claude-vision、lemo-opuscar、latex-to-word-paper），其余第三方 skill 请按上表链接回上游，避免版权和体积问题。
+本仓库 `skills/` 里放的是**实体文件在本地、上游不易定位的那几个**（grill、architect、claude-vision、lemo-opuscar、latex-to-word-paper）；其余第三方 skill 请按上表链接回上游，避免版权和体积问题。
 
 ## 四、注意
 
 - `E:\skill\skills\ppt-master-main.zip` 是 630 MB 的旧下载包，已解压，可以删。
-- `latex-to-word-paper` 目前只在 `E:\skill\skills\` 有实体文件，`~/.dsh/skills/` 里是指向它的软链。
-- `claude-vision` 的 `SKILL.md` 里写着脚本固定路径 `E:\skill\skills\claude-vision-skill\vision.js`，换机器要同步改。
+- `claude-vision/SKILL.md` 里写死了脚本路径 `E:\skill\skills\claude-vision-skill\vision.js`，换机器要同步改。
+- `E:\skill\skills\` 这个下载暂存区一旦删掉，17 个符号链接会全部断掉；删之前先把它们复制成实体。
 
 ## License
 
-- 本仓库自有部分：MIT
-- 收录的第三方 skill 各自保留原许可（`grill` 见 `skills/grill/LICENSE`）
+- 本仓库自有部分（README、整理）：MIT
+- 收录的第三方 skill 各自保留原许可：`grill` 见 `skills/grill/LICENSE`（MIT, Nagi Studio）；`lemo-opuscar` 上游 MIT（LemoLab）；`claude-vision` 上游未标许可
