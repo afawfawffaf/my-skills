@@ -3,6 +3,9 @@
 我的 AI 编程助手技能清单（DeepSeek Harness / Claude Code 通用）。
 **本会话实际可调用 30 个 skill**，来源分三处；这里记录它们是什么、什么时候触发、从哪来、怎么装回来。
 
+> `skills/` 目录**已收录 `~/.dsh/skills` 全部 21 个 skill 的完整正文**（含 `ppt-master` 的 12110 个文件）。
+> 本机 skill 目录可以直接删，从本仓库 `git clone` 即可完整恢复。
+
 > 更新于 2026-10-26 · 主机 `E:\deepseek` · DSH 0.2.1
 
 ---
@@ -64,7 +67,7 @@
 | `ppt-master` | 「做个 PPT」「生成PPT」「制作演示文稿」 | PDF/DOCX/URL/MD → SVG 页 → PPTX 全流水线。**41 KB SKILL.md + 26 个子目录**，75 MB / 1.2 万文件 |
 | `latex-to-word-paper` | 写中文学术论文 | ctex 写 LaTeX → xelatex 出 PDF → python-docx 转 docx（图、表、脚注全带上） |
 
-`ppt-master` 上游：[hugohe3/ppt-master](https://github.com/hugohe3/ppt-master)（本仓库只放索引，正文 75 MB 太大，请自行克隆）
+`ppt-master` 上游：[hugohe3/ppt-master](https://github.com/hugohe3/ppt-master)（MIT，Hugo He）。本仓库**全文收录** 12109 个文件 + 补入上游 `LICENSE`（解压时漏掉了）。
 `latex-to-word-paper` 未找到公开上游，全文收录在 `skills/latex-to-word-paper/`。
 
 ### B. 插件自带 — 9 个
@@ -105,30 +108,43 @@
 DSH 实际可调用        30 个
 ```
 
+本仓库 `skills/` 收录：**21 个 / 12133 个文件 / 75 MB**（`~/.dsh/skills` 全量，已逐个 md5 与源比对一致）。
+
 ## 三、装回来
 
+本机 `~/.dsh/skills` 删掉也能完全恢复，两条路选一条：
+
 ```bash
-# 1) 第三方合集
+# 方式 A（推荐）：直接从本仓库拷回实体
+git clone git@github.com:afawfawffaf/my-skills.git E:\my-skills
+cp -r E:\my-skills\skills\* %USERPROFILE%\.dsh\skills\
+
+# 方式 B：从各上游重新克隆（体积更小，但 claude-vision 的脚本路径要自己改）
 git clone https://github.com/obra/superpowers.git              E:\skill\skills\superpowers-main
 git clone https://github.com/nagi-studio/skills.git            E:\skill\skills\nagi-skills
 git clone https://github.com/lemomo-ai/lemo-opuscar.git        E:\skill\skills\lemo-opuscar
 git clone https://github.com/hugohe3/ppt-master.git            E:\skill\skills\ppt-master
 git clone https://github.com/asuojun/claude-vision-skill.git   E:\skill\skills\claude-vision-skill
 git clone https://github.com/multica-ai/andrej-karpathy-skills.git E:\skill\skills\andrej-karpathy-skills-main
-
-# 2) 链接进 DSH 的 skill 目录（Windows 用 mklink /D，需要开发者模式或管理员）
-#    或直接把 skills/ 下的目录复制进 ~/.dsh/skills/
 ```
 
-本仓库 `skills/` 里放的是**实体文件在本地、上游不易定位的那几个**（grill、architect、claude-vision、lemo-opuscar、latex-to-word-paper）；其余第三方 skill 请按上表链接回上游，避免版权和体积问题。
+> 方式 A 拷进去的是**实体目录**，不再是符号链接——所以 `E:\skill\skills` 那个下载暂存区可以放心删。
 
 ## 四、注意
 
-- `E:\skill\skills\ppt-master-main.zip` 是 630 MB 的旧下载包，已解压，可以删。
+- `E:\skill\skills\ppt-master-main.zip` 是 603 MB 的旧下载包，**已解压且与解压目录 12109 文件 md5 全一致**，可以删。但 zip 里另有未解压的 `examples/`(1250)、`docs/`(38)、`README`，删 zip 会丢这些（skill 本身不受影响）。
 - `claude-vision/SKILL.md` 里写死了脚本路径 `E:\skill\skills\claude-vision-skill\vision.js`，换机器要同步改。
-- `E:\skill\skills\` 这个下载暂存区一旦删掉，17 个符号链接会全部断掉；删之前先把它们复制成实体。
+- `E:\skill\skills\` 这个下载暂存区一旦删掉，17 个符号链接会全部断掉。**用「方式 A」把本仓库的实体目录拷进 `~/.dsh/skills` 之后就可以删了。**
+- `~/.claude/skills/` 里那 12 个（尤其 `academic-skills-main`、`research-writing-skill-main`、`dotenv`、`dotenvx` 4 个 DSH 独有件）**不在本仓库**，删了不可恢复。
 
 ## License
 
 - 本仓库自有部分（README、整理）：MIT
-- 收录的第三方 skill 各自保留原许可：`grill` 见 `skills/grill/LICENSE`（MIT, Nagi Studio）；`lemo-opuscar` 上游 MIT（LemoLab）；`claude-vision` 上游未标许可
+- 收录的第三方 skill 各自保留原许可：
+  - superpowers 14 个 → MIT（obra/superpowers）
+  - `karpathy-guidelines` → 见上游 multica-ai/andrej-karpathy-skills
+  - `grill` / `architect` → MIT, Nagi Studio（见 `skills/grill/LICENSE`）
+  - `lemo-opuscar` → MIT, LemoLab
+  - `ppt-master` → MIT, Hugo He（见 `skills/ppt-master/LICENSE`）
+  - `claude-vision` → 上游未标许可
+  - `latex-to-word-paper` → 未找到公开上游
