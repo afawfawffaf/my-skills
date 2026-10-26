@@ -87,15 +87,20 @@
 
 ### C. `~/.claude/skills/` — 12 个，**DSH 没扫这个目录**
 
-其中 8 个与 `~/.dsh/skills` 重名（brainstorming、executing-plans、karpathy-guidelines、requesting-code-review、systematic-debugging、test-driven-development、verification-before-completion、writing-plans）。
-真正只在 claude 那边、DSH **调不到**的有 4 个：
+这是 **Claude Code 的 skill 目录**（本机装了 `winget` 版 Claude Code），DSH 扫描的是 `~/.dsh/skills/`，两套目录互不相通 —— 所以这里的 skill **DSH 一个都调不到**。
 
-| skill | 用途 |
-|---|---|
-| `academic-skills-main` | `academic-research`：论文阅读/选题/写作/实验设计全套 |
-| `research-writing-skill-main` | `research-writing-assistant`：论文、学位论文、文献综述、LaTeX 输出 |
-| `dotenv` | Node.js 从 `.env` 加载环境变量 |
-| `dotenvx` | dotenvx 多环境管理、加密 `.env` |
+其中 8 个与 `~/.dsh/skills` 重名，且内容**逐个 md5 完全一致**（属重复存放，不是两个版本）：brainstorming、executing-plans、karpathy-guidelines、requesting-code-review、systematic-debugging、test-driven-development、verification-before-completion、writing-plans。
+
+真正只在 claude 那边、DSH 调不到的 4 个 —— **已收录在本仓库 `skills-claude/`**：
+
+| skill | 触发名 | 用途 | 上游 | 许可 |
+|---|---|---|---|---|
+| `academic-skills-main` | `academic-research` | 学术研究全流程：读论文（带讲故事）、想方向、设计实验与 ablation/baseline、写数学证明与 LaTeX 定理、写论文到 camera-ready（NeurIPS/ICLR/ACL）、四步结构化审稿打分、导师匹配分析与 cold email | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | MIT |
+| `research-writing-skill-main` | `research-writing-assistant` | 论文/学位论文/文献综述写作：头脑风暴、分章写作、LaTeX 输出 | [Norman-bury/research-writing-skill](https://github.com/Norman-bury/research-writing-skill) | MIT（旬常） |
+| `dotenv` | `dotenv` | Node.js 从 `.env` 加载环境变量；含加密 key、变量展开、命令替换等坑 | npm `dotenv` 作者 motdotla | BSD-2-Clause |
+| `dotenvx` | `dotenvx` | dotenvx 多环境管理、变量展开、加密 `.env` 供 CI/CD 提交 | npm `dotenvx` 作者 motdotla | BSD-3-Clause |
+
+> `academic-skills-main` / `research-writing-skill-main` 名字带 `-main`，是 GitHub 默认分支 zip 解压出来的（不是 git clone），所以没有 git 历史。
 
 ---
 
@@ -104,25 +109,36 @@
 ```
 ~/.dsh/skills        21 个   其中 17 个是指向 E:\skill\skills\ 的符号链接
 插件自带              9 个
-~/.claude/skills     12 个   8 个重名 + 4 个 DSH 不可见
+~/.claude/skills     12 个   8 个与 dsh 重名（内容一致）+ 4 个 DSH 不可见
 ─────────────────────────────
 DSH 实际可调用        30 个
 ```
 
-本仓库 `skills/` 收录：**21 个 / 12167 个文件 / 75 MB**（`~/.dsh/skills` 全量）。
+本仓库收录：
 
-验证方式：从 GitHub 全新 `git clone` 下来，与 `~/.dsh/skills` 逐个文件 md5 比对 —— **0 缺失、0 内容不同**，唯一多出的是补入的 `ppt-master/LICENSE`。
+| 目录 | 内容 | 文件数 | 体积 |
+|---|---|---|---|
+| `skills/` | `~/.dsh/skills` 全量 21 个 | 12167 | 75 MB |
+| `skills-claude/` | `~/.claude/skills` 独有的 4 个 | 134 | 1.2 MB |
+
+验证方式：从 GitHub 全新 `git clone` 下来，与两个源目录逐个文件 md5 比对 —— **0 缺失、0 内容不同**，唯一多出的是补入的 `ppt-master/LICENSE`。
 
 ## 三、装回来
 
-本机 `~/.dsh/skills` 删掉也能完全恢复，两条路选一条：
+本机两个 skill 目录删掉都能恢复：
 
 ```bash
-# 方式 A（推荐）：直接从本仓库拷回实体
 git clone git@github.com:afawfawffaf/my-skills.git E:\my-skills
-cp -r E:\my-skills\skills\* %USERPROFILE%\.dsh\skills\
 
-# 方式 B：从各上游重新克隆（体积更小，但 claude-vision 的脚本路径要自己改）
+# 恢复到 DSH
+cp -r E:\my-skills\skills\*         %USERPROFILE%\.dsh\skills\
+
+# 恢复到 Claude Code（4 个独有件；另 8 个可从 skills\ 里一并拷）
+cp -r E:\my-skills\skills-claude\*  %USERPROFILE%\.claude\skills\
+```
+
+> 方式 B：从各上游重新克隆（体积更小，但 claude-vision 的脚本路径要自己改）
+```bash
 git clone https://github.com/obra/superpowers.git              E:\skill\skills\superpowers-main
 git clone https://github.com/nagi-studio/skills.git            E:\skill\skills\nagi-skills
 git clone https://github.com/lemomo-ai/lemo-opuscar.git        E:\skill\skills\lemo-opuscar
@@ -138,7 +154,7 @@ git clone https://github.com/multica-ai/andrej-karpathy-skills.git E:\skill\skil
 - `E:\skill\skills\ppt-master-main.zip` 是 603 MB 的旧下载包，**已解压且与解压目录 12109 文件 md5 全一致**，可以删。但 zip 里另有未解压的 `examples/`(1250)、`docs/`(38)、`README`，删 zip 会丢这些（skill 本身不受影响）。
 - `claude-vision/SKILL.md` 里写死了脚本路径 `E:\skill\skills\claude-vision-skill\vision.js`，换机器要同步改。
 - `E:\skill\skills\` 这个下载暂存区一旦删掉，17 个符号链接会全部断掉。**用「方式 A」把本仓库的实体目录拷进 `~/.dsh/skills` 之后就可以删了。**
-- `~/.claude/skills/` 里那 12 个（尤其 `academic-skills-main`、`research-writing-skill-main`、`dotenv`、`dotenvx` 4 个 DSH 独有件）**不在本仓库**，删了不可恢复。
+- `~/.claude/skills/` 里那 12 个：**4 个独有件已备份在本仓库 `skills-claude/`**，可以删；另 8 个与 `skills/` 内容一致，删了也能从本仓库恢复。
 
 ## License
 
@@ -151,3 +167,7 @@ git clone https://github.com/multica-ai/andrej-karpathy-skills.git E:\skill\skil
   - `ppt-master` → MIT, Hugo He（见 `skills/ppt-master/LICENSE`）
   - `claude-vision` → 上游未标许可
   - `latex-to-word-paper` → 未找到公开上游
+  - `academic-skills-main` → MIT（见 `skills-claude/academic-skills-main/LICENSE`）
+  - `research-writing-skill-main` → MIT, 旬常（见 `skills-claude/research-writing-skill-main/LICENSE`）
+  - `dotenv` → BSD-2-Clause, motdotla
+  - `dotenvx` → BSD-3-Clause, motdotla
