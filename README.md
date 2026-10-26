@@ -1,0 +1,120 @@
+# my-skills
+
+我的 AI 编程助手技能清单（DeepSeek Harness / Claude Code 通用）。
+**本会话实际可调用 30 个 skill**，来源分三处；这里记录它们是什么、什么时候触发、从哪来、怎么装回来。
+
+> 更新于 2026-10-26 · 主机 `E:\deepseek` · DSH 0.2.1
+
+---
+
+## 一、总表
+
+### A. `~/.dsh/skills/` — 21 个（主力）
+
+#### ① 开发流程方法论 · superpowers 全家桶（13 个，第三方）
+
+| skill | 什么时候触发 | 内容 |
+|---|---|---|
+| `using-superpowers` | 会话开头 | 规定「先查 skill 再动手」，含 `references/` |
+| `brainstorming` | 任何创造性工作前 | 先挖需求、意图、设计，再写代码（含 `scripts/`） |
+| `writing-plans` | 有 spec、多步任务 | 先写实施计划，别急着碰代码 |
+| `executing-plans` | 有现成计划 | 分阶段执行，带 review 检查点 |
+| `subagent-driven-development` | 在当前会话跑计划 | 用子 agent 逐任务执行 |
+| `dispatching-parallel-agents` | ≥2 个互不依赖的任务 | 并行分发，无共享状态才可用 |
+| `test-driven-development` | 写任何功能/修 bug | 先写测试（真 red/green） |
+| `systematic-debugging` | 遇到 bug、测试失败、行为异常 | 先定位再改（11 个文件，最厚） |
+| `requesting-code-review` | 完成任务、合并前 | 发起评审，验证符合需求 |
+| `receiving-code-review` | 收到评审意见 | 别盲从，先质疑再验证 |
+| `verification-before-completion` | 要说「做完了」之前 | 必须跑命令验证，证据先于断言 |
+| `using-git-worktrees` | 需要隔离工作区 | 建 worktree，不污染当前分支 |
+| `finishing-a-development-branch` | 实现完成、测试通过 | 收尾：merge / PR / 清理 |
+
+上游：[obra/superpowers](https://github.com/obra/superpowers)（MIT）
+
+#### ② 中文场景自研（4 个）
+
+| skill | 什么时候触发 | 内容 |
+|---|---|---|
+| `grill` | 「拷打我」「追问我」「帮我想清楚」「有什么没想到的」「grill me」「stress-test this」「poke holes in this」 | 分 5 档强度分轮追问，直到重要未知暴露；可选 decision log |
+| `architect` | 「用什么技术做」「怎么部署」「which stack」「how to host」 | 需求清楚后比 2-3 套方案并推荐一套；先读 `docs/decisions-*.md` |
+| `claude-vision` | 需要看图/OCR，但模型看不到或 `read_image` 失败 | 调外部 OpenAI 兼容 vision 接口转成文字描述 |
+| `lemo-opuscar` | 「做个视频/短片/动画/宣传片」+ 指定风格 | 纯代码短片：油画厚涂、水彩、浮世绘、卫星简报、产品拆解、显微叙事 |
+
+- `grill` / `architect` 上游：[nagi-studio/skills](https://github.com/nagi-studio/skills) 的 `skills/pondering/`（MIT，Nagi Studio）
+- `claude-vision` 上游：[asuojun/claude-vision-skill](https://github.com/asuojun/claude-vision-skill)（本机版删掉了 `node_modules`，脚本仍在 `E:\skill\skills\claude-vision-skill\vision.js`）
+- `lemo-opuscar` 上游：[lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) 的 `plugin/skills/lemo-opuscar/`（MIT，LemoLab）
+
+#### ③ 重家伙（3 个）
+
+| skill | 什么时候触发 | 内容 |
+|---|---|---|
+| `ppt-master` | 「做个 PPT」「生成PPT」「制作演示文稿」 | PDF/DOCX/URL/MD → SVG 页 → PPTX 全流水线。**41 KB SKILL.md + 26 个子目录**，75 MB / 1.2 万文件 |
+| `latex-to-word-paper` | 写中文学术论文 | ctex 写 LaTeX → xelatex 出 PDF → python-docx 转 docx（图、表、脚注全带上） |
+| `writing-skills` | 写/改/验证 skill 本身 | 含 `examples/` |
+
+`ppt-master` 上游：[hugohe3/ppt-master](https://github.com/hugohe3/ppt-master)（本仓库只放索引，正文 75 MB 太大，请自行克隆）
+
+### B. 插件自带 — 9 个
+
+| skill | 用途 |
+|---|---|
+| `dsh-comfyui-workflows` | ComfyUI 出图/视频/音频的入口；也管工作流区分（图工作流 vs API 工作流）与音色库 |
+| `diagnose-windows-sandbox-acl` | Windows 上 DSH 沙箱莫名拒绝访问时，一条命令查路径+所有祖先并修 ACL |
+| `office` | Office 总入口，按需分流到下面 6 个 |
+| `office-docx` | 创建/读取/编辑/校验 Word |
+| `office-pptx` | 创建/读取/编辑/校验 PowerPoint |
+| `office-xlsx` | 创建/读取/编辑/校验 Excel（含公式） |
+| `office-export-pdf` | 用 LibreOffice Kit 转 PDF |
+| `office-recalculate` | 刷新表格公式缓存并验证计算结果 |
+| `office-render` | 渲染文档图片 / 检查视觉排版 |
+
+### C. `~/.claude/skills/` — 12 个，**DSH 没扫这个目录**
+
+其中 8 个与 `~/.dsh/skills` 重名（brainstorming、executing-plans、karpathy-guidelines、requesting-code-review、systematic-debugging、test-driven-development、verification-before-completion、writing-plans）。
+真正只在 claude 那边、DSH **调不到**的有 4 个：
+
+| skill | 用途 |
+|---|---|
+| `academic-skills-main` | `academic-research`：论文阅读/选题/写作/实验设计全套 |
+| `research-writing-skill-main` | `research-writing-assistant`：论文、学位论文、文献综述、LaTeX 输出 |
+| `dotenv` | Node.js 从 `.env` 加载环境变量 |
+| `dotenvx` | dotenvx 多环境管理、加密 `.env` |
+
+---
+
+## 二、统计
+
+```
+~/.dsh/skills        21 个   其中 17 个是指向 E:\skill\skills\ 的符号链接
+插件自带              9 个
+~/.claude/skills     12 个   8 个重名 + 4 个 DSH 不可见
+─────────────────────────────
+DSH 实际可调用        30 个
+```
+
+## 三、装回来
+
+```bash
+# 1) 第三方合集
+git clone https://github.com/obra/superpowers.git          E:\skill\skills\superpowers-main
+git clone https://github.com/nagi-studio/skills.git        E:\skill\skills\nagi-skills
+git clone https://github.com/lemomo-ai/lemo-opuscar.git    E:\skill\skills\lemo-opuscar
+git clone https://github.com/hugohe3/ppt-master.git        E:\skill\skills\ppt-master
+git clone https://github.com/asuojun/claude-vision-skill.git E:\skill\skills\claude-vision-skill
+
+# 2) 链接进 DSH 的 skill 目录（Windows 用 mklink /D，需要开发者模式或管理员）
+#    或者直接把 skills/ 下的目录复制进 ~/.dsh/skills/
+```
+
+本仓库 `skills/` 里放的是**自己写的 / 改过的那几个**（grill、architect、claude-vision、lemo-opuscar、latex-to-word-paper），其余第三方 skill 请按上表链接回上游，避免版权和体积问题。
+
+## 四、注意
+
+- `E:\skill\skills\ppt-master-main.zip` 是 630 MB 的旧下载包，已解压，可以删。
+- `latex-to-word-paper` 目前只在 `E:\skill\skills\` 有实体文件，`~/.dsh/skills/` 里是指向它的软链。
+- `claude-vision` 的 `SKILL.md` 里写着脚本固定路径 `E:\skill\skills\claude-vision-skill\vision.js`，换机器要同步改。
+
+## License
+
+- 本仓库自有部分：MIT
+- 收录的第三方 skill 各自保留原许可（`grill` 见 `skills/grill/LICENSE`）
