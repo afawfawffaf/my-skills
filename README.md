@@ -5,6 +5,7 @@
 
 > `skills/` 目录**已收录 `~/.dsh/skills` 全部 21 个 skill 的完整正文**（含 `ppt-master` 的 12110 个文件）。
 > 本机 skill 目录可以直接删，从本仓库 `git clone` 即可完整恢复。
+> 仓库带 `.gitattributes`（`* -text`）关闭行尾转换，保证 `.sh` / `.js` / `.svg` 逐字节保真。
 
 > 更新于 2026-10-26 · 主机 `E:\deepseek` · DSH 0.2.1
 
@@ -108,7 +109,9 @@
 DSH 实际可调用        30 个
 ```
 
-本仓库 `skills/` 收录：**21 个 / 12133 个文件 / 75 MB**（`~/.dsh/skills` 全量，已逐个 md5 与源比对一致）。
+本仓库 `skills/` 收录：**21 个 / 12167 个文件 / 75 MB**（`~/.dsh/skills` 全量）。
+
+验证方式：从 GitHub 全新 `git clone` 下来，与 `~/.dsh/skills` 逐个文件 md5 比对 —— **0 缺失、0 内容不同**，唯一多出的是补入的 `ppt-master/LICENSE`。
 
 ## 三、装回来
 
