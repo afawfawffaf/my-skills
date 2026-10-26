@@ -1,0 +1,3 @@
+# 本仓库收录的是 skill 的原始文件，必须逐字节保真。
+# 关闭一切行尾转换：存什么、取什么，避免 Windows 上 autocrlf 把 .sh/.js 变成 CRLF 后失效。
+* -text
